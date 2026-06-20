@@ -42,3 +42,6 @@ next-env.d.ts
 
 # claude code local settings (personal, not shared)
 .claude/settings.local.json
+
+# local npm cache (sandbox installs)
+.npm-cache/
