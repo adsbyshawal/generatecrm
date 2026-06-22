@@ -1,38 +1,42 @@
 import { Check } from "lucide-react";
 import { outcomes } from "@/lib/content";
-import SectionTitle from "@/components/ui/SectionTitle";
 import FadeIn from "@/components/ui/FadeIn";
+import Icon from "@/components/ui/Icon";
 
-// Section 8 — Segment outcomes: 4 cards with purple header band + 3 bullets.
 export default function SegmentOutcomes() {
   return (
-    <section className="bg-bg-primary">
-      <div className="mx-auto max-w-6xl px-6 py-20 sm:px-8 lg:py-24">
-        <SectionTitle tag={outcomes.tag} title={outcomes.title} className="mb-14" />
+    <section className="mx-auto max-w-7xl px-6 py-24">
+      <FadeIn className="max-w-2xl">
+        <h2 className="font-serif text-4xl leading-[1.1] tracking-tight text-ink sm:text-5xl">
+          {outcomes.title}
+        </h2>
+      </FadeIn>
 
-        <FadeIn className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {outcomes.cards.map((card) => (
-            <div
-              key={card.name}
-              className="flex flex-col overflow-hidden rounded-2xl border border-border bg-bg-card transition-transform duration-200 hover:-translate-y-1"
-            >
-              <div className="flex items-center gap-2 bg-purple px-5 py-4">
-                <span aria-hidden>{card.emoji}</span>
-                <span className="text-[13px] font-bold text-white">{card.name}</span>
-              </div>
-              <ul className="flex flex-col gap-3 p-5">
-                {card.points.map((point) => (
-                  <li key={point} className="flex items-start gap-2.5">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-purple" aria-hidden />
-                    <span className="text-[13px] font-light leading-snug text-text-sub">
-                      {point}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+      <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {outcomes.cards.map((card) => (
+          <div
+            key={card.name}
+            className="rounded-3xl border border-black/[0.03] bg-surface p-7"
+          >
+            <div className="flex items-center gap-3">
+              <Icon name={card.icon} className="h-5 w-5 text-ink" />
+              <h3 className="text-lg font-medium tracking-tight text-ink">
+                {card.name}
+              </h3>
             </div>
-          ))}
-        </FadeIn>
+            <ul className="mt-5 space-y-3">
+              {card.points.map((p) => (
+                <li
+                  key={p}
+                  className="flex items-start gap-3 text-base font-light leading-snug text-ink/70"
+                >
+                  <Check className="mt-1 h-4 w-4 shrink-0 text-ink/40" strokeWidth={1.5} />
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </section>
   );

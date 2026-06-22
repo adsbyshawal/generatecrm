@@ -2,26 +2,26 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { audience } from "@/lib/content";
-import SectionTitle from "@/components/ui/SectionTitle";
-import FadeIn from "@/components/ui/FadeIn";
+import Icon from "@/components/ui/Icon";
 
-// Section 5 — Audience selector. Tabs toggle copy + stat cards (fade only).
 export default function AudienceTabs() {
   const [active, setActive] = useState(0);
   const tab = audience.tabs[active];
 
   return (
-    <section className="bg-bg-secondary">
-      <div className="mx-auto max-w-6xl px-6 py-20 sm:px-8 lg:py-24">
-        <SectionTitle tag={audience.tag} title={audience.title} className="mb-12" />
+    <section className="bg-surface-2/60 py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <h2 className="max-w-3xl font-serif text-4xl leading-[1.1] tracking-tight text-ink sm:text-5xl">
+          {audience.title}
+        </h2>
 
-        {/* Tab buttons */}
+        {/* Tabs */}
         <div
           role="tablist"
-          aria-label="Audience"
-          className="mb-10 flex flex-wrap justify-center gap-x-8 gap-y-2 border-b border-border"
+          aria-label="Choose your business type"
+          className="mt-10 flex flex-wrap gap-2"
         >
           {audience.tabs.map((t, i) => {
             const selected = i === active;
@@ -31,62 +31,64 @@ export default function AudienceTabs() {
                 role="tab"
                 aria-selected={selected}
                 onClick={() => setActive(i)}
-                className={`-mb-px flex min-h-[44px] items-center gap-2 border-b-2 px-1 pb-3 text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2 rounded-full border px-5 py-2.5 text-base font-medium transition-colors ${
                   selected
-                    ? "border-purple text-white"
-                    : "border-transparent text-text-muted hover:text-text-sub"
+                    ? "border-transparent bg-ink text-bg"
+                    : "border-black/10 text-ink/70 hover:bg-black/5"
                 }`}
               >
-                <span aria-hidden>{t.emoji}</span>
+                <Icon name={t.icon} className="h-4 w-4" />
                 {t.label}
               </button>
             );
           })}
         </div>
 
-        {/* Content panel — keyed so it fades on tab switch */}
-        <FadeIn
-          key={tab.id}
-          delay={0}
-          className="grid gap-10 lg:grid-cols-2 lg:items-start"
-        >
-          {/* Left — copy */}
-          <div className="flex flex-col gap-5">
-            <h3 className="text-2xl font-bold leading-snug text-white">{tab.hook}</h3>
-            <p className="text-[15px] font-light leading-relaxed text-text-sub">
+        {/* Panel */}
+        <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <h3 className="font-serif text-3xl leading-tight tracking-tight text-ink">
+              {tab.hook}
+            </h3>
+            <p className="mt-5 text-lg font-light leading-relaxed text-ink/70">
               {tab.body}
             </p>
-            <ul className="flex flex-col gap-2.5">
+            <ul className="mt-8 space-y-3">
               {tab.uses.map((use) => (
-                <li key={use} className="flex items-start gap-3">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-purple" aria-hidden />
-                  <span className="text-sm font-light text-text-sub">{use}</span>
+                <li
+                  key={use}
+                  className="flex items-start gap-3 text-base font-light text-ink/80"
+                >
+                  <Check className="mt-1 h-4 w-4 shrink-0 text-ink/40" strokeWidth={1.5} />
+                  {use}
                 </li>
               ))}
             </ul>
             <Link
               href={tab.link.href}
-              className="mt-1 w-fit text-sm font-semibold text-magenta transition-opacity hover:opacity-80"
+              className="mt-8 inline-flex items-center gap-1.5 text-base font-medium text-ink transition-opacity hover:opacity-70"
             >
               {tab.link.label}
+              <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
             </Link>
           </div>
 
-          {/* Right — 4 stat cards */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 self-start">
             {tab.cards.map((card) => (
               <div
                 key={card.label}
-                className="flex flex-col gap-2 rounded-2xl border border-border bg-bg-card p-5"
+                className="rounded-2xl border border-black/[0.03] bg-bg p-6"
               >
-                <span className="text-2xl font-extrabold text-purple">{card.value}</span>
-                <span className="text-xs font-light leading-snug text-text-sub">
+                <div className="font-serif text-3xl tracking-tight text-ink">
+                  {card.value}
+                </div>
+                <p className="mt-2 text-sm font-light leading-snug text-ink/60">
                   {card.label}
-                </span>
+                </p>
               </div>
             ))}
           </div>
-        </FadeIn>
+        </div>
       </div>
     </section>
   );

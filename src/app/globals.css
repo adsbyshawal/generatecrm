@@ -1,63 +1,62 @@
 @import "tailwindcss";
 
 /* ============================================================
-   GENERATE CRM — Design System Foundation
-   Tailwind v4: brand tokens live here in @theme (no tailwind.config.ts).
+   GENERATE CRM — Warm-monochrome "Oatmeal" design system
+   Light theme. Inter (body) + Instrument Serif (display).
+   Tailwind v4: tokens live here in @theme (no tailwind.config.ts).
    ============================================================ */
 
-/* Raw CSS variables — for use in gradients / custom CSS via var(--x). */
 :root {
-  --purple: #6f00cd;
-  --magenta: #f900fd;
-  --bg: #0a0a0a;
-  --bg2: #111111;
-  --bg3: #161616;
-  --bg4: #1c1c1c;
-  --border: rgba(255, 255, 255, 0.07);
-  --border-purple: rgba(111, 0, 205, 0.35);
-  --white: #ffffff;
-  --sub: #bbbbbb;
-  --muted: #666666;
+  --bg: #f8f6f8; /* warm off-white page */
+  --ink: #272125; /* warm near-black: text + dark buttons */
+  --hero: #2c2428; /* dark hero card */
+  --hero-tint: #7a6470; /* subtle plum/mauve undertone */
+  --surface: #efecee;
+  --surface-2: #f0edef;
+  --surface-3: #eae6e8;
+  --surface-4: #e5e0e3;
 }
 
-/* Tailwind theme tokens — generate utilities:
-     bg-purple / text-purple / border-purple
-     bg-magenta / text-magenta
-     bg-bg-primary / bg-bg-secondary / bg-bg-card / bg-bg-card2
-     border-border / border-border-purple
-     text-text-primary / text-text-sub / text-text-muted
-   Font:
-     font-sans → Poppins (wired from layout.tsx via --font-poppins)
+/* Tailwind theme tokens -> utilities:
+     bg-bg / text-bg
+     text-ink / bg-ink / border-ink   (+ /70 /60 opacity modifiers)
+     bg-hero / bg-hero-tint
+     bg-surface / bg-surface-2 / bg-surface-3 / bg-surface-4
+     font-sans (Inter) / font-serif (Instrument Serif)
 */
 @theme {
-  --color-purple: #6f00cd;
-  --color-magenta: #f900fd;
+  --color-bg: #f8f6f8;
+  --color-ink: #272125;
+  --color-hero: #2c2428;
+  --color-hero-tint: #7a6470;
+  --color-surface: #efecee;
+  --color-surface-2: #f0edef;
+  --color-surface-3: #eae6e8;
+  --color-surface-4: #e5e0e3;
 
-  --color-bg-primary: #0a0a0a;
-  --color-bg-secondary: #111111;
-  --color-bg-card: #161616;
-  --color-bg-card2: #1c1c1c;
-
-  --color-border: rgba(255, 255, 255, 0.07);
-  --color-border-purple: rgba(111, 0, 205, 0.35);
-
-  --color-text-primary: #ffffff;
-  --color-text-sub: #bbbbbb;
-  --color-text-muted: #666666;
-
-  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
 }
 
-/* Dark mode only — no light theme, no toggle (per CLAUDE.md). */
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   background: var(--bg);
-  color: var(--white);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-weight: 300;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* Grain/noise overlay (from the template) — apply to a fixed,
+   pointer-events-none layer only, never a scrolling container. */
+.grain-overlay {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22250%22%20height%3D%22250%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22turbulence%22%20baseFrequency%3D%221.4%22%20numOctaves%3D%221%22%20seed%3D%222%22%20stitchTiles%3D%22stitch%22%20result%3D%22n%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%20in%3D%22n%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E");
 }

@@ -1,58 +1,45 @@
-import {
-  KanbanSquare,
-  Zap,
-  LayoutTemplate,
-  MessagesSquare,
-  Bot,
-  Star,
-  type LucideIcon,
-} from "lucide-react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { features } from "@/lib/content";
-import SectionTitle from "@/components/ui/SectionTitle";
 import FadeIn from "@/components/ui/FadeIn";
+import Icon from "@/components/ui/Icon";
 
-const icons: Record<string, LucideIcon> = {
-  pipeline: KanbanSquare,
-  automation: Zap,
-  funnels: LayoutTemplate,
-  messaging: MessagesSquare,
-  ai: Bot,
-  reviews: Star,
-};
-
-// Section 6 — Features grid: 6 cards, gradient accent line on hover.
 export default function FeaturesGrid() {
   return (
-    <section className="bg-bg-primary">
-      <div className="mx-auto max-w-6xl px-6 py-20 sm:px-8 lg:py-24">
-        <SectionTitle
-          tag={features.tag}
-          title={features.title}
-          subtitle={features.subtitle}
-          className="mb-14"
-        />
+    <section className="mx-auto max-w-7xl px-6 py-24">
+      <FadeIn className="max-w-2xl">
+        <h2 className="font-serif text-4xl leading-[1.1] tracking-tight text-ink sm:text-5xl">
+          {features.title}
+        </h2>
+        <p className="mt-6 text-lg font-light leading-relaxed text-ink/70">
+          {features.subtitle}
+        </p>
+        <Link
+          href={features.link.href}
+          className="mt-6 inline-flex items-center gap-1.5 text-base font-medium text-ink transition-opacity hover:opacity-70"
+        >
+          {features.link.label}
+          <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
+        </Link>
+      </FadeIn>
 
-        <FadeIn className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-          {features.cards.map((card) => {
-            const Icon = icons[card.icon] ?? Zap;
-            return (
-              <div
-                key={card.name}
-                className="group relative flex flex-col gap-4 bg-bg-secondary p-8 transition-colors duration-200 hover:bg-bg-card"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-[10px] border border-border-purple bg-purple/15">
-                  <Icon className="h-5 w-5 text-magenta" aria-hidden />
-                </span>
-                <h3 className="text-[15px] font-bold text-white">{card.name}</h3>
-                <p className="text-[13px] font-light leading-relaxed text-text-sub">
-                  {card.body}
-                </p>
-                {/* Bottom gradient accent — appears on hover */}
-                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-purple to-magenta opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-              </div>
-            );
-          })}
-        </FadeIn>
+      <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {features.cards.map((card) => (
+          <div
+            key={card.name}
+            className="rounded-3xl border border-black/[0.03] bg-surface p-8"
+          >
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-black/5 bg-bg">
+              <Icon name={card.icon} className="h-5 w-5 text-ink" />
+            </div>
+            <h3 className="mt-5 text-lg font-medium tracking-tight text-ink">
+              {card.name}
+            </h3>
+            <p className="mt-2 text-base font-light leading-relaxed text-ink/70">
+              {card.body}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );

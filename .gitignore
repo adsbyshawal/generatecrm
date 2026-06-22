@@ -45,3 +45,6 @@ next-env.d.ts
 
 # local npm cache (sandbox installs)
 .npm-cache/
+
+# design skills source bundle (installed globally to ~/.claude/skills, not part of the app)
+Claude Website Skills 2/

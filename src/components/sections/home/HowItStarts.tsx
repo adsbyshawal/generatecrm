@@ -1,47 +1,46 @@
+import { ArrowRight } from "lucide-react";
 import { howItStarts } from "@/lib/content";
-import SectionTitle from "@/components/ui/SectionTitle";
 import FadeIn from "@/components/ui/FadeIn";
 
-// Section 9 — How it starts: 3 numbered step cards + closing line.
 export default function HowItStarts() {
   return (
-    <section className="bg-bg-secondary">
-      <div className="mx-auto max-w-6xl px-6 py-20 sm:px-8 lg:py-24">
-        <SectionTitle
-          tag={howItStarts.tag}
-          title={howItStarts.title}
-          className="mb-14"
-        />
+    <section className="bg-surface-2/60 py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <FadeIn className="max-w-2xl">
+          <p className="mb-4 text-sm font-medium uppercase tracking-wider text-ink/50">
+            {howItStarts.tag}
+          </p>
+          <h2 className="font-serif text-4xl leading-[1.1] tracking-tight text-ink sm:text-5xl">
+            {howItStarts.title}
+          </h2>
+        </FadeIn>
 
-        <FadeIn className="relative grid gap-6 md:grid-cols-3">
-          {/* Connecting gradient line behind the step badges (desktop) */}
-          <div
-            aria-hidden
-            className="absolute left-0 right-0 top-[26px] hidden h-px bg-gradient-to-r from-purple to-magenta md:block"
-          />
-
+        <div className="mt-14 grid gap-6 md:grid-cols-3">
           {howItStarts.steps.map((step) => (
             <div
               key={step.num}
-              className="relative flex flex-col gap-4 rounded-2xl border border-border-purple bg-bg-card p-7 transition-colors duration-200 hover:border-purple"
+              className="flex flex-col rounded-3xl border border-black/[0.03] bg-bg p-8"
             >
-              <span className="flex h-13 w-13 items-center justify-center rounded-full bg-purple text-lg font-extrabold text-white">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-ink font-serif text-xl text-bg">
                 {step.num}
               </span>
-              <h3 className="text-xl font-bold text-white">{step.name}</h3>
-              <p className="text-sm font-light leading-relaxed text-text-sub">
+              <h3 className="mt-5 text-lg font-medium tracking-tight text-ink">
+                {step.name}
+              </h3>
+              <p className="mt-2 flex-1 text-base font-light leading-relaxed text-ink/70">
                 {step.body}
               </p>
-              <p className="mt-auto pt-2 text-[13px] font-medium text-magenta">
+              <p className="mt-5 flex items-center gap-1.5 text-sm font-medium text-ink/80">
+                <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
                 {step.note}
               </p>
             </div>
           ))}
-        </FadeIn>
+        </div>
 
-        <FadeIn className="mt-12 text-center">
-          <p className="text-base font-semibold text-purple">{howItStarts.closing}</p>
-        </FadeIn>
+        <p className="mt-12 text-center font-serif text-2xl italic tracking-tight text-ink">
+          {howItStarts.closing}
+        </p>
       </div>
     </section>
   );
