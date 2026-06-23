@@ -1,106 +1,108 @@
 #!/usr/bin/env node
-// Fetch brand logos from SVGL (svgl.app) for the integrations marquee.
-// Downloads matched SVGs into public/logos/ and prints found/missing.
-import { writeFileSync, mkdirSync } from "node:fs";
+// Fetch brand logos for the integrations marquee from multiple sources:
+// SVGL (svgl.app) -> Simple Icons CDN -> Iconify (logos / simple-icons).
+// Saves local SVGs to public/logos/, prints found/missing + a TS snippet.
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 
+// key, name, and optional source hints (si = Simple Icons slug, logos = Iconify "logos" slug)
 const items = [
-  { key: "google-calendar", name: "Google Calendar", tries: ["google calendar"] },
-  { key: "google", name: "Google", tries: ["google"] },
-  { key: "facebook", name: "Facebook", tries: ["facebook"] },
-  { key: "instagram", name: "Instagram", tries: ["instagram"] },
-  { key: "linkedin", name: "LinkedIn", tries: ["linkedin"] },
-  { key: "tiktok", name: "TikTok", tries: ["tiktok"] },
-  { key: "whatsapp", name: "WhatsApp", tries: ["whatsapp"] },
-  { key: "stripe", name: "Stripe", tries: ["stripe"] },
-  { key: "paypal", name: "PayPal", tries: ["paypal"] },
-  { key: "square", name: "Square", tries: ["square"] },
-  { key: "google-ads", name: "Google Ads", tries: ["google ads", "googleads", "google adsense"] },
-  { key: "xero", name: "Xero", tries: ["xero"] },
-  { key: "quickbooks", name: "QuickBooks", tries: ["quickbooks", "intuit quickbooks"] },
-  { key: "wave", name: "Wave", tries: ["wave", "waveapps"] },
-  { key: "slack", name: "Slack", tries: ["slack"] },
-  { key: "clio", name: "Clio", tries: ["clio"] },
-  { key: "canva", name: "Canva", tries: ["canva"] },
-  { key: "google-business", name: "Google Business", tries: ["google my business", "google business"] },
-  { key: "woocommerce", name: "WooCommerce", tries: ["woocommerce"] },
-  { key: "shopify", name: "Shopify", tries: ["shopify"] },
-  { key: "printful", name: "Printful", tries: ["printful"] },
-  { key: "printify", name: "Printify", tries: ["printify"] },
-  { key: "shippo", name: "Shippo", tries: ["shippo"] },
-  { key: "shipstation", name: "ShipStation", tries: ["shipstation"] },
-  { key: "clickup", name: "ClickUp", tries: ["clickup"] },
-  { key: "notion", name: "Notion", tries: ["notion"] },
-  { key: "google-contacts", name: "Google Contacts", tries: ["google contacts"] },
-  { key: "airtable", name: "Airtable", tries: ["airtable"] },
-  { key: "basecamp", name: "Basecamp", tries: ["basecamp"] },
-  { key: "typeform", name: "Typeform", tries: ["typeform"] },
-  { key: "asana", name: "Asana", tries: ["asana"] },
-  { key: "google-forms", name: "Google Forms", tries: ["google forms"] },
-  { key: "monday", name: "Monday.com", tries: ["monday", "mondaycom", "monday.com"] },
-  { key: "openrouter", name: "OpenRouter", tries: ["openrouter", "open router"] },
-  { key: "manus", name: "Manus", tries: ["manus"] },
-  { key: "fathom", name: "Fathom", tries: ["fathom"] },
-  { key: "apify", name: "Apify", tries: ["apify"] },
-  { key: "mistral", name: "Mistral AI", tries: ["mistral ai", "mistral"] },
-  { key: "linear", name: "Linear", tries: ["linear"] },
-  { key: "calcom", name: "Cal.com", tries: ["cal.com", "calcom", "cal"] },
-  { key: "hubspot", name: "HubSpot", tries: ["hubspot"] },
-  { key: "klaviyo", name: "Klaviyo", tries: ["klaviyo"] },
-  { key: "housecall-pro", name: "Housecall Pro", tries: ["housecall pro", "housecallpro"] },
-  { key: "calendly", name: "Calendly", tries: ["calendly"] },
+  { key: "google-calendar", name: "Google Calendar", logos: ["google-calendar"] },
+  { key: "google", name: "Google", si: ["google"], logos: ["google-icon", "google"] },
+  { key: "facebook", name: "Facebook", si: ["facebook"], logos: ["facebook"] },
+  { key: "instagram", name: "Instagram", si: ["instagram"], logos: ["instagram-icon"] },
+  { key: "linkedin", name: "LinkedIn", si: ["linkedin"], logos: ["linkedin-icon"] },
+  { key: "tiktok", name: "TikTok", si: ["tiktok"], logos: ["tiktok-icon"] },
+  { key: "whatsapp", name: "WhatsApp", si: ["whatsapp"], logos: ["whatsapp-icon"] },
+  { key: "stripe", name: "Stripe", si: ["stripe"], logos: ["stripe"] },
+  { key: "paypal", name: "PayPal", si: ["paypal"], logos: ["paypal"] },
+  { key: "square", name: "Square", si: ["square"], logos: ["square"] },
+  { key: "google-ads", name: "Google Ads", si: ["googleads"], logos: ["google-ads"] },
+  { key: "xero", name: "Xero", si: ["xero"], logos: ["xero"] },
+  { key: "quickbooks", name: "QuickBooks", si: ["quickbooks"], logos: ["quickbooks"] },
+  { key: "wave", name: "Wave", si: ["wave"], logos: ["wave"] },
+  { key: "slack", name: "Slack", si: ["slack"], logos: ["slack-icon"] },
+  { key: "clio", name: "Clio", si: ["clio"], logos: ["clio"] },
+  { key: "canva", name: "Canva", si: ["canva"], logos: ["canva-icon", "canva"] },
+  { key: "google-business", name: "Google Business", si: ["googlemybusiness"], logos: ["google-my-business"] },
+  { key: "woocommerce", name: "WooCommerce", si: ["woocommerce"], logos: ["woocommerce-icon", "woocommerce"] },
+  { key: "shopify", name: "Shopify", si: ["shopify"], logos: ["shopify"] },
+  { key: "printful", name: "Printful", si: ["printful"], logos: ["printful"] },
+  { key: "printify", name: "Printify", si: ["printify"], logos: ["printify"] },
+  { key: "shippo", name: "Shippo", si: ["shippo"], logos: ["shippo"] },
+  { key: "shipstation", name: "ShipStation", si: ["shipstation"], logos: ["shipstation"] },
+  { key: "clickup", name: "ClickUp", si: ["clickup"], logos: ["clickup-icon", "clickup"] },
+  { key: "notion", name: "Notion", si: ["notion"], logos: ["notion-icon", "notion"] },
+  { key: "google-contacts", name: "Google Contacts", logos: ["google-contacts"] },
+  { key: "airtable", name: "Airtable", si: ["airtable"], logos: ["airtable"] },
+  { key: "basecamp", name: "Basecamp", si: ["basecamp"], logos: ["basecamp-icon", "basecamp"] },
+  { key: "typeform", name: "Typeform", si: ["typeform"], logos: ["typeform-icon", "typeform"] },
+  { key: "asana", name: "Asana", si: ["asana"], logos: ["asana-icon", "asana"] },
+  { key: "google-forms", name: "Google Forms", logos: ["google-forms"] },
+  { key: "monday", name: "Monday.com", logos: ["monday-icon", "monday"] },
+  { key: "openrouter", name: "OpenRouter", logos: ["openrouter"] },
+  { key: "mistral", name: "Mistral AI", logos: ["mistral-ai-icon", "mistral"] },
+  { key: "linear", name: "Linear", si: ["linear"], logos: ["linear-icon", "linear"] },
+  { key: "calcom", name: "Cal.com", logos: ["cal-com", "calcom"] },
+  { key: "hubspot", name: "HubSpot", si: ["hubspot"], logos: ["hubspot"] },
+  { key: "klaviyo", name: "Klaviyo", si: ["klaviyo"], logos: ["klaviyo"] },
+  { key: "housecall-pro", name: "Housecall Pro", logos: ["housecall-pro"] },
+  { key: "apify", name: "Apify", si: ["apify"], logos: ["apify"] },
+  { key: "fathom", name: "Fathom", logos: ["fathom"] },
+  { key: "calendly", name: "Calendly", si: ["calendly"], logos: ["calendly"] },
+  { key: "asana2", name: "Asana", skip: true },
 ];
 
 const OUT = "public/logos";
 mkdirSync(OUT, { recursive: true });
 
-const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+const isSvg = (s) => typeof s === "string" && s.includes("<svg") && !s.includes("404");
 
-const res = await fetch("https://api.svgl.app");
-const catalog = await res.json();
-const byNorm = new Map();
-for (const e of catalog) {
-  const title = typeof e.title === "string" ? e.title : "";
-  const t = norm(title);
-  if (t && !byNorm.has(t)) byNorm.set(t, e);
+async function tryFetch(url) {
+  try {
+    const r = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
+    if (!r.ok) return null;
+    const t = await r.text();
+    return isSvg(t) ? t : null;
+  } catch {
+    return null;
+  }
 }
-
-const pickRoute = (e) => {
-  const r = e.route;
-  if (!r) return null;
-  if (typeof r === "string") return r;
-  return r.light || r.dark || null; // light = dark artwork for light backgrounds
-};
 
 const found = [];
 const missing = [];
+
 for (const it of items) {
-  let entry = null;
-  for (const cand of [it.name, ...it.tries]) {
-    const e = byNorm.get(norm(cand));
-    if (e) {
-      entry = e;
-      break;
-    }
-  }
-  const route = entry && pickRoute(entry);
-  if (!route) {
-    missing.push(it.name);
+  if (it.skip) continue;
+  const file = `${OUT}/${it.key}.svg`;
+
+  // Keep an already-downloaded SVGL file (official artwork) if present.
+  if (existsSync(file) && isSvg(readFileSync(file, "utf8"))) {
+    found.push(it);
     continue;
   }
-  try {
-    const svg = await (await fetch(route)).text();
-    if (!svg.includes("<svg")) {
-      missing.push(it.name);
-      continue;
-    }
-    writeFileSync(`${OUT}/${it.key}.svg`, svg);
-    found.push({ name: it.name, key: it.key, title: entry.title });
-  } catch {
+
+  const si = it.si || [];
+  const logos = it.logos || [];
+  const candidates = [
+    ...si.map((s) => `https://cdn.simpleicons.org/${s}`),
+    ...logos.map((s) => `https://api.iconify.design/logos/${s}.svg`),
+    ...si.map((s) => `https://api.iconify.design/simple-icons/${s}.svg`),
+  ];
+
+  let svg = null;
+  for (const url of candidates) {
+    svg = await tryFetch(url);
+    if (svg) break;
+  }
+  if (svg) {
+    writeFileSync(file, svg);
+    found.push(it);
+  } else {
     missing.push(it.name);
   }
 }
 
-console.log(`\nFOUND ${found.length}/${items.length}`);
-for (const f of found) console.log(`  + ${f.name}  ->  ${f.key}.svg  (svgl: ${f.title})`);
-console.log(`\nMISSING ${missing.length}`);
-for (const m of missing) console.log(`  - ${m}`);
+console.log(`\nFOUND ${found.length}`);
+console.log(`MISSING ${missing.length}: ${missing.join(", ") || "(none)"}`);
+console.log(`\n--- paste into content.ts integrations.logos ---`);
+for (const f of found) console.log(`    { name: ${JSON.stringify(f.name)}, file: "/logos/${f.key}.svg" },`);

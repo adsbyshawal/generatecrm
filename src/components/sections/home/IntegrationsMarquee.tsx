@@ -1,27 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { integrations } from "@/lib/content";
 
-type Logo = { name: string; slug: string };
+type Logo = { name: string; file: string };
 
 function Chip({ item }: { item: Logo }) {
-  const [broken, setBroken] = useState(false);
   return (
     <span className="flex shrink-0 items-center gap-2.5 rounded-full border border-black/5 bg-surface px-4 py-2.5">
-      {item.slug && !broken ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={`https://cdn.simpleicons.org/${item.slug}/272125`}
-          alt=""
-          width={18}
-          height={18}
-          className="h-[18px] w-[18px] object-contain opacity-80"
-          loading="lazy"
-          onError={() => setBroken(true)}
-        />
-      ) : null}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={item.file}
+        alt=""
+        width={18}
+        height={18}
+        className="h-[18px] w-[18px] object-contain opacity-70 grayscale"
+        loading="lazy"
+      />
       <span className="whitespace-nowrap text-sm font-medium text-ink/70">
         {item.name}
       </span>
