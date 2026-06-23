@@ -4,17 +4,23 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { nav, site } from "@/lib/content";
-import Button from "@/components/ui/Button";
 
-function Wordmark({ onClick }: { onClick?: () => void }) {
+function Logo({ onClick }: { onClick?: () => void }) {
   return (
     <Link
       href="/"
       onClick={onClick}
-      className="font-serif text-2xl tracking-tight text-ink"
       aria-label={`${site.name} home`}
+      className="flex shrink-0 items-center"
     >
-      generateCRM
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/logo.png"
+        alt=""
+        width={40}
+        height={40}
+        className="h-10 w-10 rounded-full object-cover"
+      />
     </Link>
   );
 }
@@ -23,17 +29,18 @@ export default function Navigation() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="relative z-50">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <Wordmark />
+    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
+      {/* Floating dark capsule — Keep Generating language. Compact: hugs content. */}
+      <nav className="mx-auto flex w-full items-center justify-between gap-6 rounded-full border border-white/10 bg-dark/95 py-2.5 pl-4 pr-3 shadow-lg shadow-black/20 backdrop-blur-md sm:gap-7 md:w-fit md:pl-3 md:pr-2.5">
+        <Logo />
 
-        {/* Desktop links */}
-        <ul className="hidden items-center gap-8 md:flex">
-          {nav.links.map((link) => (
+        {/* Desktop links — just Solutions + Pricing */}
+        <ul className="hidden items-center gap-7 md:flex">
+          {nav.primary.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="text-base font-medium text-ink transition-opacity hover:opacity-70"
+                className="text-base font-medium text-white/75 transition-colors hover:text-white"
               >
                 {link.label}
               </Link>
@@ -41,23 +48,26 @@ export default function Navigation() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <Link
+            href={nav.login.href}
+            className="hidden px-2 text-base font-medium text-white/75 transition-colors hover:text-white sm:block"
+          >
+            {nav.login.label}
+          </Link>
           <Link
             href={nav.cta.href}
-            className="hidden text-base font-medium text-ink transition-opacity hover:opacity-70 sm:block"
+            className="hidden rounded-full border border-white/80 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-ink sm:inline-flex"
           >
-            Log in
-          </Link>
-          <Button href={nav.cta.href} className="hidden sm:inline-flex">
             {nav.cta.label}
-          </Button>
+          </Link>
 
           {/* Mobile hamburger */}
           <button
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
-            className="flex h-11 w-11 items-center justify-center rounded-full text-ink hover:bg-black/5 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-white/10 md:hidden"
           >
             <Menu className="h-6 w-6" strokeWidth={1.5} />
           </button>
@@ -68,7 +78,7 @@ export default function Navigation() {
       {open ? (
         <div className="fixed inset-0 z-50 flex flex-col bg-bg md:hidden">
           <div className="flex items-center justify-between px-6 py-6">
-            <Wordmark onClick={() => setOpen(false)} />
+            <Logo onClick={() => setOpen(false)} />
             <button
               type="button"
               onClick={() => setOpen(false)}
@@ -79,26 +89,35 @@ export default function Navigation() {
             </button>
           </div>
           <ul className="flex flex-1 flex-col gap-2 px-6 pt-6">
-            {nav.links.map((link) => (
+            {nav.primary.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="block py-3 font-serif text-3xl text-ink"
+                  className="block py-3 text-3xl font-semibold tracking-tight text-ink"
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href={nav.login.href}
+                onClick={() => setOpen(false)}
+                className="block py-3 text-3xl font-semibold tracking-tight text-ink"
+              >
+                {nav.login.label}
+              </Link>
+            </li>
           </ul>
           <div className="px-6 pb-10">
-            <Button
+            <Link
               href={nav.cta.href}
               onClick={() => setOpen(false)}
-              className="w-full"
+              className="flex min-h-[48px] w-full items-center justify-center rounded-full bg-accent px-6 py-3.5 text-base font-semibold text-white"
             >
               {nav.cta.label}
-            </Button>
+            </Link>
           </div>
         </div>
       ) : null}

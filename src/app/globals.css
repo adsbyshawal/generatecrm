@@ -1,38 +1,62 @@
 @import "tailwindcss";
 
 /* ============================================================
-   GENERATE CRM — Warm-monochrome "Oatmeal" design system
-   Light theme. Inter (body) + Instrument Serif (display).
+   GENERATE CRM — "Bright" design system
+   Light, airy, fintech-inspired. Bold Inter headlines,
+   confident blue accent, soft pastel section bands.
    Tailwind v4: tokens live here in @theme (no tailwind.config.ts).
    ============================================================ */
 
 :root {
-  --bg: #f8f6f8; /* warm off-white page */
-  --ink: #272125; /* warm near-black: text + dark buttons */
-  --hero: #2c2428; /* dark hero card */
-  --hero-tint: #7a6470; /* subtle plum/mauve undertone */
-  --surface: #efecee;
-  --surface-2: #f0edef;
-  --surface-3: #eae6e8;
-  --surface-4: #e5e0e3;
+  --bg: #fcfcfe; /* near-white page */
+  --ink: #14151b; /* near-black: headings + dark UI */
+  --ink-sub: #565863; /* muted body text */
+
+  --accent: #2f5bf5; /* confident royal blue: CTAs, links, active */
+  --accent-strong: #2545d6; /* hover/pressed blue */
+  --accent-soft: #e9edfd; /* pale blue tint band */
+
+  --cta: #22c55e; /* green: reserved for the single final sign-up CTA */
+  --cta-strong: #18a04b; /* hover/pressed green */
+
+  --lavender: #eaeafb; /* periwinkle section band */
+  --peach: #fbe7d6; /* warm peach band */
+  --cream: #fbf3e9; /* soft cream band */
+
+  --dark: #1a1b21; /* dark cards + photo overlays */
+  --surface: #f3f4f9; /* light card / chip surface */
+  --surface-2: #eef0f7;
 }
 
 /* Tailwind theme tokens -> utilities:
      bg-bg / text-bg
      text-ink / bg-ink / border-ink   (+ /70 /60 opacity modifiers)
-     bg-hero / bg-hero-tint
-     bg-surface / bg-surface-2 / bg-surface-3 / bg-surface-4
-     font-sans (Inter) / font-serif (Instrument Serif)
+     text-ink-sub
+     bg-accent / text-accent / border-accent
+     bg-accent-strong / bg-accent-soft
+     bg-lavender / bg-peach / bg-cream
+     bg-dark / bg-surface / bg-surface-2
+     font-sans (Inter) / font-serif (Instrument Serif, transitional)
 */
 @theme {
-  --color-bg: #f8f6f8;
-  --color-ink: #272125;
-  --color-hero: #2c2428;
-  --color-hero-tint: #7a6470;
-  --color-surface: #efecee;
-  --color-surface-2: #f0edef;
-  --color-surface-3: #eae6e8;
-  --color-surface-4: #e5e0e3;
+  --color-bg: #fcfcfe;
+  --color-ink: #14151b;
+  --color-ink-sub: #565863;
+
+  --color-accent: #2f5bf5;
+  --color-accent-strong: #2545d6;
+  --color-accent-soft: #e9edfd;
+
+  --color-cta: #22c55e;
+  --color-cta-strong: #18a04b;
+
+  --color-lavender: #eaeafb;
+  --color-peach: #fbe7d6;
+  --color-cream: #fbf3e9;
+
+  --color-dark: #1a1b21;
+  --color-surface: #f3f4f9;
+  --color-surface-2: #eef0f7;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
@@ -51,12 +75,12 @@ body {
 }
 
 ::selection {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--accent);
+  color: #ffffff;
 }
 
-/* Grain/noise overlay (from the template) — apply to a fixed,
-   pointer-events-none layer only, never a scrolling container. */
+/* Grain/noise overlay — apply to a fixed, pointer-events-none layer
+   only (e.g. inside dark cards), never a scrolling container. */
 .grain-overlay {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22250%22%20height%3D%22250%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22turbulence%22%20baseFrequency%3D%221.4%22%20numOctaves%3D%221%22%20seed%3D%222%22%20stitchTiles%3D%22stitch%22%20result%3D%22n%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%20in%3D%22n%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E");
 }

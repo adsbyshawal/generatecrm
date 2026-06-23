@@ -10,6 +10,12 @@ export const site = {
 } as const;
 
 export const nav = {
+  // Slim top nav: only these two. The rest live in the footer.
+  primary: [
+    { label: "Solutions", href: "/solution" },
+    { label: "Pricing", href: "/pricing" },
+  ],
+  // Full set — used by the footer / sitemap.
   links: [
     { label: "Solutions", href: "/solution" },
     { label: "Industries", href: "/industries" },
@@ -17,12 +23,15 @@ export const nav = {
     { label: "Partners", href: "/partners" },
     { label: "About", href: "/about-us" },
   ],
+  login: { label: "Log in", href: "/get-started" },
   cta: { label: "Book a Demo", href: "/get-started" },
 } as const;
 
 export const hero = {
   headlineLead: "Your leads deserve a system that never",
   headlineAccent: "sleeps.",
+  // Signature hero animation: the blue word cycles, sliding up + fading.
+  headlineRotators: ["sleeps.", "stops.", "forgets.", "misses."],
   subheadline:
     "The all-in-one revenue system built for coaches, consultants, course creators, and local businesses. Capture leads, automate follow-up, manage your pipeline, and close more deals without duct-taping five tools together.",
   primaryCta: { label: "Book a Demo", href: "/get-started" },
@@ -61,6 +70,50 @@ export const pipeline = {
   ],
   automation:
     "Automation running: SMS sent to Sarah Chen, 42 seconds after form submit",
+} as const;
+
+// Hero product visual — a simplified, GoHighLevel-style analytics dashboard.
+// Illustrative demo numbers (a product mockup, not a results claim).
+export const dashboard = {
+  title: "Generate CRM, Dashboard",
+  range: "Last 30 days",
+  metrics: [
+    {
+      kind: "donut",
+      label: "Opportunity status",
+      value: "142",
+      caption: "Open",
+      percent: 68,
+      color: "#2f5bf5",
+    },
+    {
+      kind: "value",
+      label: "Pipeline value",
+      value: "$48.2K",
+      caption: "Total revenue",
+      trend: [30, 42, 38, 55, 60, 72],
+    },
+    {
+      kind: "donut",
+      label: "Conversion rate",
+      value: "57%",
+      caption: "Won",
+      percent: 57,
+      color: "#22c55e",
+    },
+  ],
+  funnel: [
+    { stage: "New Lead", pct: 100, color: "#2f5bf5" },
+    { stage: "Demo Booked", pct: 72, color: "#22b8cf" },
+    { stage: "Proposal", pct: 48, color: "#7c6cf5" },
+    { stage: "Won", pct: 31, color: "#22c55e" },
+  ],
+  distribution: [
+    { label: "New Lead", value: 38, color: "#2f5bf5" },
+    { label: "Demo Booked", value: 24, color: "#22b8cf" },
+    { label: "Proposal", value: 16, color: "#7c6cf5" },
+    { label: "Won", value: 8, color: "#22c55e" },
+  ],
 } as const;
 
 // ── Section 2 — Stats bar ───────────────────────────────────────────

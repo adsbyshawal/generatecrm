@@ -8,9 +8,19 @@ export default function Footer() {
         <div className="mb-20 grid grid-cols-2 gap-8 md:grid-cols-5">
           {/* Brand */}
           <div className="col-span-2">
-            <span className="font-serif text-2xl tracking-tight text-ink">
-              generateCRM
-            </span>
+            <Link href="/" className="flex items-center gap-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.png"
+                alt=""
+                width={36}
+                height={36}
+                className="h-9 w-9 rounded-full object-cover"
+              />
+              <span className="text-xl font-semibold tracking-tight text-ink">
+                generateCRM
+              </span>
+            </Link>
             <p className="mt-4 max-w-xs text-base font-light leading-relaxed text-ink/60">
               {footer.tagline}
             </p>

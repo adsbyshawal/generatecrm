@@ -7,14 +7,14 @@ type Logo = { name: string; file: string };
 
 function Chip({ item }: { item: Logo }) {
   return (
-    <span className="flex shrink-0 items-center gap-2.5 rounded-full border border-black/5 bg-surface px-4 py-2.5">
+    <span className="flex shrink-0 items-center gap-2.5 rounded-full border border-black/[0.06] bg-white px-4 py-2.5 shadow-[0_1px_2px_rgba(20,21,27,0.04)]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={item.file}
         alt=""
         width={18}
         height={18}
-        className="h-[18px] w-[18px] object-contain opacity-70 grayscale"
+        className="h-[18px] w-[18px] object-contain"
         loading="lazy"
       />
       <span className="whitespace-nowrap text-sm font-medium text-ink/70">
@@ -26,7 +26,6 @@ function Chip({ item }: { item: Logo }) {
 
 function Row({ items, reverse }: { items: Logo[]; reverse?: boolean }) {
   const reduce = useReducedMotion();
-  // Duplicate so a -50% shift loops seamlessly.
   const loop = [...items, ...items];
   const keyframes = reverse ? ["-50%", "0%"] : ["0%", "-50%"];
 
@@ -36,9 +35,7 @@ function Row({ items, reverse }: { items: Logo[]; reverse?: boolean }) {
         className="flex gap-3 pr-3"
         animate={reduce ? undefined : { x: keyframes }}
         transition={
-          reduce
-            ? undefined
-            : { duration: 45, ease: "linear", repeat: Infinity }
+          reduce ? undefined : { duration: 50, ease: "linear", repeat: Infinity }
         }
       >
         {loop.map((item, i) => (
@@ -56,8 +53,8 @@ export default function IntegrationsMarquee() {
   const rowB = all.slice(mid);
 
   return (
-    <section className="py-16">
-      <p className="mb-8 text-center text-base font-light text-ink/60">
+    <section className="py-16 sm:py-20">
+      <p className="mb-8 text-center text-base font-medium text-ink-sub">
         {integrations.heading}
       </p>
 
